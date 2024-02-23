@@ -1,0 +1,10 @@
+int main()
+{
+
+    int i=7;
+    if(i>7)
+    {
+        proint("%d",i);
+    }
+return 0;
+}
