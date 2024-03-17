@@ -32,18 +32,18 @@ class CLexer:
             (r'\bauto\b', 'AUTO'),
             (r'\bregister\b', 'REGISTER'),
             (r'\bsizeof\b', 'SIZEOF'),
-            (r'[a-zA-Z_][a-zA-Z0-9_]*', 'IDENTIFIER'),  # Variable or function names
-            (r'\d+', 'NUMBER'),  # Integer literals
-            (r'\d+\.\d+', 'FLOAT_NUMBER'),  # Floating-point literals
-            (r'"([^"]*)"', 'STRING_LITERAL'),  # String literals
-            (r'\'([^\'\\]|\\.){1}\'', 'CHAR_LITERAL'),  # Character literals
-            (r'[-+*/%=<>!&|;,\(\)\{\}\[\]\.\?:]', 'OPERATOR'),  # Operators and punctuation
+            (r'[a-zA-Z_][a-zA-Z0-9_]*', 'IDENTIFIER'),  
+            (r'\d+', 'NUMBER'),  
+            (r'\d+\.\d+', 'FLOAT_NUMBER'),  
+            (r'"([^"]*)"', 'STRING_LITERAL'), 
+            (r'\'([^\'\\]|\\.){1}\'', 'CHAR_LITERAL'), 
+            (r'[-+*/%=<>!&|;,\(\)\{\}\[\]\.\?:]', 'OPERATOR'), 
         ]
 
         combined_patterns = '|'.join('(?P<%s>%s)' % (name, pattern) for pattern, name in patterns)
         token_pattern = re.compile(combined_patterns)
 
-        variable_addresses = {}  # Dictionary to store variable names and addresses
+        variable_addresses = {} 
         tokens = []
 
         for match in token_pattern.finditer(self.code):
@@ -52,12 +52,11 @@ class CLexer:
 
             if token_type == 'IDENTIFIER':
                 if token_value in variable_addresses:
-                    # Reuse the existing address for the variable
+                    
                     address = variable_addresses[token_value]
                 else:
-                    # Generate a random 4-digit number as the address for new variables
+                    
                     address = random.randint(1000, 9999)
-                    # Store the variable name and address in the dictionary
                     variable_addresses[token_value] = address
 
                 tokens.append((token_type, token_value, address))
@@ -69,18 +68,18 @@ class CLexer:
     def get_tokens(self):
         return self.tokens
 
-# Read input from an external text file
-file_path = 'code.txt'  # Replace with your file path
+
+file_path = 'code.txt'  
 with open(file_path, 'r') as file:
     code_from_file = file.read()
 
-# Create lexer and get tokens
+
 lexer = CLexer(code_from_file)
 tokens = lexer.get_tokens()
 
-# Print tokens to the terminal
+
 for token in tokens:
-    if len(token) == 3:  # Check if the token has an address (for IDENTIFIER)
+    if len(token) == 3:  
         print(f'{token[0]}: {token[1]} (Address: {token[2]})')
     else:
         print(f'{token[0]}: {token[1]}')
